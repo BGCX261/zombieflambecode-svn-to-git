@@ -1,0 +1,119 @@
+=AS3 FishEye Menu Documentation + Tutorial=
+
+This is a small class that allows you to easily create a "FishEye Menu" in your AS3 projects.
+
+== Public Functions ==
+
+  * setStyle( dir:String = RIGHT , dist:`*` = NEAR , spd:`*` = FAST ):void 
+  * push( obj:`*` ):void
+  * pop():`*`
+  * setZoom( zX:Number , zY:Number ):void
+  * empty():Boolean
+  * setSelected( obj: `*` ):void
+
+== Setters ==
+  * zoomX( zX:Number ):void
+  * zoomY( zY:Number ):void
+  * speedOut( sO:Number ):void
+  * speedIn( sI:Number ):void
+  * distX( dX:Number ):void
+  * distY( dY:Number ):void
+  * selected( clickedItemEvent:MouseEvent ):void   | _New v1.1_
+
+== Getters ==
+  * zoomX():Number
+  * zoomY():Number
+  * speedOut():Number
+  * speedIn():Number
+  * distX():Number
+  * distY():Number
+  * selected():`*`     | _New v1.1_
+  * lastSelected:`*`   | _New v1.1_
+
+= Usage / Tutorial =
+
+# Include the class file in your project
+
+  * `import zombieflambe.ui.FishEyeMenu;`
+
+# Create the FishEyeMenu object
+
+  * `var fishEyeMenu:FishEyeMenu = new FishEyeMenu();`
+
+# Set Menu Behavior / Style
+
+  * `fishEyeMenu.setStyle( direction [, distance , speed ]);`
+
+    * *direction*: String - Use Constants to specify the direction of the menu items' movement
+      * *NONE* - On MouseOver, item stays in place
+      * *LEFT* - On MouseOver, item slides horizontally to the left
+      * *RIGHT* - On MouseOver, item slides horizontally to the right
+      * *UP* - On MouseOver, item slides vertically up
+      * *DOWN* - On MouseOver, item slides vertically down
+      * *UP_LEFT* - On MouseOver, item slides up and to the left
+      * *UP_RIGHT* - On MouseOver, item slides up and to the right
+      * *DOWN_LEFT* - On MouseOver, item slides down and to the left
+      * *DOWN_RIGHT* - On MouseOver, item slides down and to the right
+    * *distance* (optional): String Constant , Number - Sets how far _in pixels_ the menu item will tween to
+      * *NEAR* - _DEFAULT_ set to 25px
+      * *MEDIUM* - set to 50px
+      * *FAR* - set to 100px
+    * *speed* (optional): String Constant , Number - Sets how long _in seconds_ for the tween to take
+      * *SLOW* - set to 2seconds
+      * *FAST* - _DEFAULT_ set to 0.2 seconds
+
+        * Ex. `fishEyeMenu.setStyle( FishEyeMenu.RIGHT , FishEyeMenu.FAR , FishEyeMenu.FAST );`
+# Push your pre-configured TextField / Sprite / MovieClip onto the menu
+
+  * `fishEyeMenu.push( menuItemOneTextField );`
+    
+    * This applies a MouseOver, MouseOut, & MouseDown listener to the item
+
+# Pop items from your menu
+
+  * `var menuItem:* = fishEyeMenu.pop();`
+
+    * Removes item from the menu, removing eventListeners
+
+# Garbage Collection and cleaning your menu 
+
+  * `fishEyeMenu.empty();`
+
+    * This function removes any Event Listeners added _by itself_ not any that you've added.  It also removes menu items from its internal array freeing memory and cleaning up after itself.
+
+# Set the Scale X and Y values at the same time with setScale() or separately with setters
+
+  * `fishEyeMenu.setZoom( 1.5 , 2.0 );`
+  * `fishEyeMenu.zoomX = 1.5;`
+  * `fishEyeMenu.zoomY = 2.0;`
+
+    * Zoom is synonymous with "scale" here.  
+
+# Set the Distance X and Y values to specify how far you want the items to travel on MouseOver/MouseOut
+
+  * `fishEyeMenu.distX = 40;`
+  * `fishEyeMenu.distY = 80;`
+
+
+# Set the Speed Out and In values for the tween
+
+  * `fishEyeMenu.speedOut = 2.5;` 
+  * `fishEyeMenu.speedIn  = 0.4`
+
+    * In this example, the speed upon mouseover would be relatively slow ( 2.5 seconds to complete ) but as the mouse left the menu item on mouseout, it would snap back quickly ( 0.4 seconds ) back to it's start position.
+
+# You can also listen for specific events to dispatch from your menu item
+
+  * `menuItemOneTextField.addEventListener( FishEyeMenu.ON_START_OUT , doStartOut );`
+
+    * IF you have any EventListeners attached to your menu items listening for the following FishEyeMenu-dispatched events:
+
+      * *ON_START_OUT*    - Fires on MouseOver as the item is moving "OUT" from start XY
+      * *ON_START_IN*     - Fires on MouseOut as the item begins moving "IN" back to start XY
+      * *ON_COMPLETE_OUT* - Fires on completion of tween "OUT" from start XY to distance
+      * *ON_COMPLETE_IN*  - Fires on completion of tween back "IN" to its start position
+      * *SELECTED_CHANGED*  - Fires on MouseDown when changing _currentSelected and _lastSelected
+
+    * _Note: If you do not add event listeners to your items listening for these specific FishEyeMenu constants, the events will not fire_
+
+# Getters follow the same syntax as setters
